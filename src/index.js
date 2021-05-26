@@ -1,17 +1,26 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import {Provider} from 'react-redux';
+import {BrowserRouter as Router} from 'react-router-dom';
+import ErrorBoundry from './components/error-boundry';
+import ApiService from './services/api-service';
+import ApiServiceContext from './components/api-service-context';
+import store from './store';
 import './index.css';
-import App from './App';
-import reportWebVitals from './reportWebVitals';
+import 'bootstrap/dist/css/bootstrap.css';
+import App from './components/app';
+
+
+const apiService = new ApiService();
 
 ReactDOM.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>,
-  document.getElementById('root')
-);
-
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
-reportWebVitals();
+    <Provider store={store}>
+		<ErrorBoundry>
+			<ApiServiceContext.Provider value={apiService}>
+				<Router>
+					<App/>
+				</Router>
+			</ApiServiceContext.Provider>
+		</ErrorBoundry>
+	</Provider>
+    , document.getElementById('root'));
